@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Model
+namespace PresentationViewModel
 {
     public class Class1
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ViewModel
+namespace Logic
 {
     public class Class1
     {
