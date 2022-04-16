@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Logic;
+using System.Drawing;
 
 namespace LogicTests;
 
@@ -20,14 +21,22 @@ public class BallTests
     }
 
     [TestMethod]
-    public void TestMove()
+    public void TestMoveDirectionNotSet()
     {
-        int testXOffset = 5;
-        int testYOffset = 7;
+        testBall.Move();
 
-        testBall.Move(testXOffset, testYOffset);
+        Assert.AreEqual(testX, testBall.Center.X);
+        Assert.AreEqual(testY, testBall.Center.Y);
+    }
 
-        Assert.AreEqual(testX + testXOffset, testBall.Center.X);
-        Assert.AreEqual(testY + testYOffset, testBall.Center.Y);
+    [TestMethod]
+    public void TestMoveDirectionSet()
+    {
+        Point testDirection = new Point(5, 7);
+        testBall.MotionDirection = testDirection;
+        testBall.Move();
+
+        Assert.AreEqual(testX + testDirection.X, testBall.Center.X);
+        Assert.AreEqual(testY + testDirection.Y, testBall.Center.Y);
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace Logic
 {
@@ -7,6 +6,7 @@ namespace Logic
     {
         private Point _center;
         private readonly int _radius;
+        private Point _motionDirection;
 
         public Ball(int x, int y, int radius)
         {
@@ -14,13 +14,15 @@ namespace Logic
             _radius = radius;
         }
 
-        public void Move(int xOffset, int yOffset)
+        public void Move()
         {
-            _center.Offset(new Point(xOffset, yOffset));
+            _center.Offset(_motionDirection);
         }
 
         public int Radius { get => _radius; }
 
-        public Point Center { get => _center; } 
+        public Point Center { get => _center; }
+
+        public Point MotionDirection { get => _motionDirection; set => _motionDirection = value; }
     }
 }
