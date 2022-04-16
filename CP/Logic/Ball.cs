@@ -5,22 +5,22 @@ namespace Logic
 {
     public class Ball
     {
-        private Point center;
-        private int radius;
+        private Point _center;
+        private readonly int _radius;
 
         public Ball(int x, int y, int radius)
         {
-            this.center = new Point(x, y);
-            this.radius = radius;
+            _center = new Point(x, y);
+            _radius = radius;
         }
 
         public void Move(int xOffset, int yOffset)
         {
-            center.Offset(new Point(xOffset, yOffset));
+            _center.Offset(new Point(xOffset, yOffset));
         }
 
-        public int Radius { get => radius; set => radius = value; }
+        public int Radius { get => _radius; }
 
-        public Point Center { get => center; }
+        public Point Center { get => _center; } 
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Logic;
-using System.Drawing;
 
 namespace LogicTests;
 
