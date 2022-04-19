@@ -23,7 +23,7 @@ public class BallTests
     [TestMethod]
     public void TestMoveDirectionNotSet()
     {
-        testBall.Move();
+        testBall.Move(0,100,0,100);
 
         Assert.AreEqual(testX, testBall.Center.X);
         Assert.AreEqual(testY, testBall.Center.Y);
@@ -32,11 +32,29 @@ public class BallTests
     [TestMethod]
     public void TestMoveDirectionSet()
     {
-        Point testDirection = new Point(5, 7);
+        Point testDirection = new Point(1, 0);
         testBall.MotionDirection = testDirection;
-        testBall.Move();
+        testBall.Move(0,100,0,100);
 
         Assert.AreEqual(testX + testDirection.X, testBall.Center.X);
         Assert.AreEqual(testY + testDirection.Y, testBall.Center.Y);
+    }
+
+    [TestMethod]
+    public void TestMoveBallOutOfBounds()
+    {
+        int testLeftBound = 0;
+        int testRightBound = testX + testRadius;
+        int testBottomBound = 0;
+        int testTopBound = 100;
+        Point testDirection = new Point(1, 0);
+
+        testBall.MotionDirection = testDirection;
+        testBall.Move(testLeftBound, testRightBound, testBottomBound, testTopBound);
+
+        Assert.IsTrue(testBall.Center.X + testBall.MotionDirection.X - testRadius >= testLeftBound);
+        Assert.IsTrue(testBall.Center.X + testBall.MotionDirection.X + testRadius <= testRightBound);
+        Assert.IsTrue(testBall.Center.Y + testBall.MotionDirection.Y - testRadius >= testBottomBound);
+        Assert.IsTrue(testBall.Center.Y + testBall.MotionDirection.Y + testRadius <= testTopBound);
     }
 }
