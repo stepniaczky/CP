@@ -10,7 +10,7 @@ public class BallTests
     static int testX = 10;
     static int testY = 7;
     static int testRadius = 2;
-    Ball testBall = new Ball(testX, testY, testRadius);
+    LogicApi testBall = LogicApi.CreateApi(testX, testY, testRadius);
 
     [TestMethod]
     public void TestConstructor()
