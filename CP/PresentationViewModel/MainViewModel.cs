@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 using PresentationModel;
 
@@ -7,34 +9,41 @@ namespace PresentationViewModel
     public class MainViewModel : ViewModelBase
     {
 
-        //public MainViewModel() : this(ModelAbstractApi.CreateApi())
-        public MainViewModel(ModelAbstractApi modelAbstractApi)
+        public MainViewModel() : this(MainModel.CreateApi())
         {
-            ModelLayer = modelAbstractApi;
+           
         }
 
-        public MainViewModel()
+        public MainViewModel(MainModel modelAbstractApi)
         {
-            //ModelLayer = modelAbstractApi;
+            ModelLayer = modelAbstractApi;
             Radious = ModelLayer.Radius;
             StartCommand = new RelayCommand(OnStart, CanStart);
             StopCommand = new RelayCommand(OnStop, CanStop);
-
         }
 
-        // public IList<object> CirclesCollection
-        // {
-        //  get
-        //   {
-        //      return b_CirclesCollection;
-        // }
-        //  set
-        //  {
-        // if (value.Equals(b_CirclesCollection))
-        //     return;
-        // RaisePropertyChanged("CirclesCollection");
-        // }
-        // }
+        public ObservableCollection<ViewModelBase> BallsCollection
+        {
+            get
+            {
+                return b_BallsCollection;
+            }
+            set
+            {
+                if (value.Equals(b_BallsCollection))
+                    return;
+                RaisePropertyChanged("BallsCollection");
+            }
+        }
+
+        public void LoadBalls()
+        {
+            BallsCollection.Clear();
+            for (int i = 0; i < BallsNumber; i++)
+            {
+                BallsCollection.Add(new ViewModelBase { FirstName = "Mark", LastName = "Allain" });
+            }
+        }
 
         public int Radious
         {
@@ -57,6 +66,7 @@ namespace PresentationViewModel
         private void OnStart()
         {
             IsStopEnabled = true;
+            LoadBalls();
         }
 
         private bool CanStart()
@@ -74,12 +84,12 @@ namespace PresentationViewModel
             return IsStopEnabled;
         }
 
-        //private IList<object> b_CirclesCollection;
+        private ObservableCollection<ViewModelBase> b_BallsCollection = new ObservableCollection<ViewModelBase>();
         private int b_Radious;
-        private ModelAbstractApi ModelLayer = ModelAbstractApi.CreateApi();
+        private MainModel ModelLayer = MainModel.CreateApi();
 
 
-        private int _ballsNumber;
+        private int _ballsNumber = 1;
         private bool _isStopEnabled = false;
 
         public bool IsStopEnabled
