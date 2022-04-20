@@ -9,6 +9,7 @@ namespace PresentationModel
         public abstract int Radius { get; }
 
 
+
         public static ModelAbstractApi CreateApi()
         {
             return new ModelApi();
@@ -18,5 +19,7 @@ namespace PresentationModel
     internal class ModelApi : ModelAbstractApi
     {
         public override int Radius => 100;
+
+        public Ball GetBall(int x, int y) => new Logic.Ball(x, y, Radius);
     }
 }
