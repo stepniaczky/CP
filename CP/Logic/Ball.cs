@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System;
 
 namespace Logic
 {
@@ -7,6 +8,7 @@ namespace Logic
         private readonly int _radius;
         private Point _center;
         private Point _motionDirection;
+        private Random random = new Random();
 
         public int Radius { get => _radius; }
         public Point Center { get => _center; }
@@ -18,8 +20,17 @@ namespace Logic
             _radius = radius;
         }
 
-        public void Move()
+        public void Move(int leftBound, int rightBound, int bottomBound, int topBound)
         {
+
+            while (!(leftBound <= (_center.X + _motionDirection.X - _radius) &&
+                         rightBound >= (_center.X + _motionDirection.X + _radius) &&
+                         bottomBound <= (_center.Y + _motionDirection.Y - _radius) &&
+                         topBound >= (_center.Y + _motionDirection.Y + _radius)))
+            {
+                _motionDirection = new Point(random.Next(-1, 2), random.Next(-1, 2));
+            }
+
             _center.Offset(_motionDirection);
         }
     }
