@@ -7,7 +7,7 @@ namespace PresentationViewModel
     public class ViewModelBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        private MainModel modelAbstractAPI;
+        private ModelAbstractApi modelAbstractAPI;
 
         protected virtual void RaisePropertyChanged([CallerMemberName] string propertyName = null)
         {
