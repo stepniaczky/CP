@@ -1,5 +1,4 @@
 ﻿using System.Drawing;
-using System;
 using System.Collections.Generic;
 using Data;
 
@@ -18,5 +17,9 @@ namespace Logic
         }
 
         public abstract void CreateBalls(int amount);
+
+        public abstract void ClearBalls();
+
+        public abstract List<Point> GetBalls();
     }
 }

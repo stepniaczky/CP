@@ -40,5 +40,20 @@ namespace Logic
 				_balls.Add(ball);
             }
         }
-	}
+
+        public override void ClearBalls()
+        {
+            Balls.RemoveRange(0, Balls.Count - 1);
+        }
+
+        public override List<Point> GetBalls()
+        {
+			List<Point> points = new List<Point>();
+            foreach (DataApi ball in Balls)
+			{
+				points.Add(ball.Center);
+            }
+			return points;
+        }
+    }
 }
