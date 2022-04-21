@@ -43,7 +43,7 @@ namespace Logic
 
         public override void ClearBalls()
         {
-            Balls.RemoveRange(0, Balls.Count - 1);
+			Balls.Clear();
         }
 
         public override List<Point> GetBalls()
