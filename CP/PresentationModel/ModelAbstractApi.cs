@@ -6,20 +6,17 @@ namespace PresentationModel
 {
     public abstract class ModelAbstractApi
     {
-        public abstract int Radius { get; }
-
-
-
         public static ModelAbstractApi CreateApi()
         {
             return new ModelApi();
         }
-    }
+        public abstract int Radius { get; }
 
-    internal class ModelApi : ModelAbstractApi
-    {
-        public override int Radius => 100;
+        public abstract void CreateBalls(int ballsNumber);
 
-        public LogicApi CreateBall(int x, int y) => LogicApi.CreateApi(x, y, Radius);
+        public abstract List<Object> GetBalls();
+
+        public abstract void ClearBalls();
     }
 }
+
