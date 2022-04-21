@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Logic;
+using System.Drawing;
 
 namespace PresentationModel
 {
@@ -14,7 +15,7 @@ namespace PresentationModel
 
         public abstract void CreateBalls(int ballsNumber);
 
-        public abstract List<Object> GetBalls();
+        public abstract List<Point> GetBalls();
 
         public abstract void ClearBalls();
     }
