@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Timers;
 using System.Collections.Generic;
 using Data;
 
@@ -7,6 +8,7 @@ namespace Logic
     public abstract class LogicApi
     {
         public abstract List<DataApi> Balls { get; }
+        public abstract Timer Timer { get; }
         public abstract int Width { get; }
         public abstract int Height { get; }
         public abstract int Radius { get; }
@@ -21,5 +23,11 @@ namespace Logic
         public abstract void ClearBalls();
 
         public abstract List<Point> GetBalls();
+
+        public abstract void Start();
+
+        public abstract void Stop();
+
+
     }
 }
