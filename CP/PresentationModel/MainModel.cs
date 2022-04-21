@@ -7,7 +7,7 @@ namespace PresentationModel
 {
     internal class ModelApi : ModelAbstractApi
     {
-        private LogicApi LogicLayer = LogicApi.CreateApi();
+        private LogicApi LogicLayer;
         private readonly int _width;
         private readonly int _height;
         public int Width { get =>  _width; } 
@@ -25,17 +25,17 @@ namespace PresentationModel
 
         public override void CreateBalls(int ballsNumber)
         {
-            return _logicApi.CreateBalls();
+            return LogicLayer.CreateBalls(ballsNumber);
         }
 
         public override List<object> GetBalls()
         {
-            return _logicApi.GetBalls();
+            return LogicLayer.GetBalls();
         }
 
         public override void ClearBalls()
         {
-            return _logicApi.ClearBalls();
+            return LogicLayer.ClearBalls();
         }
     }
 }
