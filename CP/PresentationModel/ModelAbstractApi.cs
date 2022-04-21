@@ -20,6 +20,6 @@ namespace PresentationModel
     {
         public override int Radius => 100;
 
-        public Ball GetBall(int x, int y) => new Logic.Ball(x, y, Radius);
+        public LogicApi CreateBall(int x, int y) => LogicApi.CreateApi(x, y, Radius);
     }
 }
