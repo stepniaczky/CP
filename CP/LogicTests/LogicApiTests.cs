@@ -1,60 +1,51 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Logic;
+using Data;
 using System.Drawing;
 
 namespace LogicTests;
 
 [TestClass]
-public class BallTests
+public class BallManagerTests
 {
-    static int testX = 10;
-    static int testY = 7;
-    static int testRadius = 2;
-    LogicApi testBall = LogicApi.CreateApi(testX, testY, testRadius);
+    static int testWidth = 1920;
+    static int testHeight = 1080;
+    static int testRadius = testHeight / 14;
+    LogicApi testBallManager = LogicApi.CreateApi(testWidth, testHeight, testRadius);
 
     [TestMethod]
     public void TestConstructor()
     {
-        Assert.AreEqual(testX, testBall.Center.X);
-        Assert.AreEqual(testY, testBall.Center.Y);
-        Assert.AreEqual(testRadius, testBall.Radius);
+        Assert.AreEqual(testWidth, testBallManager.Width);
+        Assert.AreEqual(testHeight, testBallManager.Height);
+        Assert.AreEqual(testRadius, testBallManager.Radius);
+        Assert.AreEqual(testBallManager.Balls.Count, 0);
     }
 
     [TestMethod]
-    public void TestMoveDirectionNotSet()
+    public void TestCreateBalls()
     {
-        testBall.Move(0,100,0,100);
+        testBallManager.CreateBalls(2);
 
-        Assert.AreEqual(testX, testBall.Center.X);
-        Assert.AreEqual(testY, testBall.Center.Y);
-    }
+        Assert.AreEqual(testBallManager.Balls.Count, 2);
 
-    [TestMethod]
-    public void TestMoveDirectionSet()
-    {
-        Point testDirection = new Point(1, 0);
-        testBall.MotionDirection = testDirection;
-        testBall.Move(0,100,0,100);
+        Assert.IsTrue(testBallManager.Balls[0].Center.X - testRadius >= 0);
+        Assert.IsTrue(testBallManager.Balls[0].Center.X + testRadius <= testWidth);
+        Assert.IsTrue(testBallManager.Balls[0].Center.Y - testRadius >= 0);
+        Assert.IsTrue(testBallManager.Balls[0].Center.Y + testRadius <= testHeight);
+        Assert.IsTrue(testBallManager.Balls[0].MotionDirection.X <= 1);
+        Assert.IsTrue(testBallManager.Balls[0].MotionDirection.X >= -1);
+        Assert.IsTrue(testBallManager.Balls[0].MotionDirection.Y <= 1);
+        Assert.IsTrue(testBallManager.Balls[0].MotionDirection.Y >= -1);
 
-        Assert.AreEqual(testX + testDirection.X, testBall.Center.X);
-        Assert.AreEqual(testY + testDirection.Y, testBall.Center.Y);
-    }
 
-    [TestMethod]
-    public void TestMoveBallOutOfBounds()
-    {
-        int testLeftBound = 0;
-        int testRightBound = testX + testRadius;
-        int testBottomBound = 0;
-        int testTopBound = 100;
-        Point testDirection = new Point(1, 0);
-
-        testBall.MotionDirection = testDirection;
-        testBall.Move(testLeftBound, testRightBound, testBottomBound, testTopBound);
-
-        Assert.IsTrue(testBall.Center.X + testBall.MotionDirection.X - testRadius >= testLeftBound);
-        Assert.IsTrue(testBall.Center.X + testBall.MotionDirection.X + testRadius <= testRightBound);
-        Assert.IsTrue(testBall.Center.Y + testBall.MotionDirection.Y - testRadius >= testBottomBound);
-        Assert.IsTrue(testBall.Center.Y + testBall.MotionDirection.Y + testRadius <= testTopBound);
+        Assert.IsTrue(testBallManager.Balls[1].Center.X - testRadius >= 0);
+        Assert.IsTrue(testBallManager.Balls[1].Center.X + testRadius <= testWidth);
+        Assert.IsTrue(testBallManager.Balls[1].Center.Y - testRadius >= 0);
+        Assert.IsTrue(testBallManager.Balls[1].Center.Y + testRadius <= testHeight);
+        Assert.IsTrue(testBallManager.Balls[1].MotionDirection.X <= 1);
+        Assert.IsTrue(testBallManager.Balls[1].MotionDirection.X >= -1);
+        Assert.IsTrue(testBallManager.Balls[1].MotionDirection.Y <= 1);
+        Assert.IsTrue(testBallManager.Balls[1].MotionDirection.Y >= -1);
     }
 }
