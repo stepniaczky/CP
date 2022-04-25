@@ -6,12 +6,70 @@ using System.Drawing;
 namespace LogicTests;
 
 [TestClass]
+public class BallTests
+{
+    static readonly int testX = 10;
+    static readonly int testY = 7;
+    static readonly int testRadius = 2;
+    readonly Ball testBall = new(testX, testY, testRadius);
+
+    [TestMethod]
+    public void TestConstructor()
+    {
+        Assert.AreEqual(testX, testBall.Center.X);
+        Assert.AreEqual(testY, testBall.Center.Y);
+        Assert.AreEqual(testRadius, testBall.Radius);
+    }
+
+    [TestMethod]
+    public void TestMoveDirectionNotSet()
+    {
+        testBall.Move(100, 100);
+
+        Assert.AreEqual(testX, testBall.Center.X);
+        Assert.AreEqual(testY, testBall.Center.Y);
+    }
+
+    [TestMethod]
+    public void TestMoveDirectionSet()
+    {
+        Point testDirection = new(1, 0);
+        testBall.MotionDirection = testDirection;
+        testBall.Move(100, 100);
+
+        Assert.AreEqual(testX + testDirection.X, testBall.Center.X);
+        Assert.AreEqual(testY + testDirection.Y, testBall.Center.Y);
+    }
+
+    [TestMethod]
+    public void TestMoveBallOutOfBounds()
+    {
+
+        int testWidth = testX + testRadius;
+        int testHeight = 100;
+        int testHorizontalDirection = 1;
+        int testVerticalDirection = 1;
+        Point testDirection = new(testHorizontalDirection, testVerticalDirection);
+
+        testBall.MotionDirection = testDirection;
+        testBall.Move(testWidth, testHeight);
+
+        Assert.AreEqual(testBall.MotionDirection.X, -testHorizontalDirection);
+        Assert.AreEqual(testBall.MotionDirection.Y, testVerticalDirection);
+
+        Assert.AreEqual(testBall.Center.X, testX - testHorizontalDirection);
+        Assert.AreEqual(testBall.Center.Y, testY + testVerticalDirection);
+    }
+}
+
+
+[TestClass]
 public class BallManagerTests
 {
-    static int testWidth = 1920;
-    static int testHeight = 1080;
-    static int testRadius = testHeight / 14;
-    LogicApi testBallManager = LogicApi.CreateApi(testWidth, testHeight, testRadius);
+    static readonly int testWidth = 1920;
+    static readonly int testHeight = 1080;
+    static readonly int testRadius = testHeight / 14;
+    readonly LogicApi testBallManager = LogicApi.CreateApi(testWidth, testHeight, testRadius);
 
     [TestMethod]
     public void TestConstructor()
@@ -69,7 +127,7 @@ public class BallManagerTests
         int testBallCount = 2;
         testBallManager.CreateBalls(testBallCount);
 
-        List<Point> points = testBallManager.GetBalls();
+        List<Ball> points = testBallManager.GetBalls();
 
         Assert.AreEqual(points.Count, testBallCount);
     }
