@@ -7,7 +7,7 @@ namespace Logic
 {
     public abstract class LogicApi
     {
-        public abstract List<DataApi> Balls { get; }
+        public abstract List<Ball> Balls { get; }
         public abstract Timer Timer { get; }
         public abstract int Width { get; }
         public abstract int Height { get; }
@@ -22,7 +22,7 @@ namespace Logic
 
         public abstract void ClearBalls();
 
-        public abstract List<Point> GetBalls();
+        public abstract List<Ball> GetBalls();
 
         public abstract void Start();
 

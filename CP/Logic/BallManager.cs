@@ -11,13 +11,13 @@ namespace Logic
 		private readonly int _width;
 		private readonly int _height;
 		private readonly int _radius;
-		private List<DataApi> _balls = new List<DataApi>();
+		private List<Ball> _balls = new List<Ball>();
 		private Timer _timer = new Timer();
 
         public override int Width { get => _width; }
 		public override int Height { get => _height; }
 		public override int Radius { get => _radius; }
-		public override List<DataApi> Balls { get => _balls; }
+		public override List<Ball> Balls { get => _balls; }
 		public override Timer Timer { get => _timer; }
 		
 
@@ -38,9 +38,11 @@ namespace Logic
 				int x = random.Next(_radius, _width - _radius);
 				int y = random.Next(_radius, _height - _radius);
 
-				DataApi ball = DataApi.CreateBall(x, y, _radius);
-				ball.MotionDirection = motionDirection;
-				_balls.Add(ball);
+                Ball ball = new Ball(x, y, _radius)
+                {
+                    MotionDirection = motionDirection
+                };
+                _balls.Add(ball);
             }
 			Start();
 		}
@@ -51,14 +53,9 @@ namespace Logic
 			Balls.Clear();
         }
 
-        public override List<Point> GetBalls()
+        public override List<Ball> GetBalls()
         {
-			List<Point> points = new List<Point>();
-            foreach (DataApi ball in Balls)
-			{
-				points.Add(ball.Center);
-            }
-			return points;
+			return Balls;
         }
 
         public override void Start()
@@ -75,7 +72,7 @@ namespace Logic
 
         private void OnTimerElapsed(object source, ElapsedEventArgs e)
 		{
-			foreach (DataApi ball in Balls)
+			foreach (Ball ball in Balls)
             {
 				ball.Move(_width, _height);
             }
