@@ -51,9 +51,15 @@ public class BallTests
         testBall.MotionDirection = testDirection;
         testBall.Move(testWidth, testHeight);
 
-        Assert.IsTrue(testBall.Center.X + testBall.MotionDirection.X - testRadius >= 0);
-        Assert.IsTrue(testBall.Center.X + testBall.MotionDirection.X + testRadius <= testWidth);
-        Assert.IsTrue(testBall.Center.Y + testBall.MotionDirection.Y - testRadius >= 0);
-        Assert.IsTrue(testBall.Center.Y + testBall.MotionDirection.Y + testRadius <= testHeight);
+        //Assert.IsTrue(testBall.Center.X + testBall.MotionDirection.X - testRadius >= 0);
+        //Assert.IsTrue(testBall.Center.X + testBall.MotionDirection.X + testRadius <= testWidth);
+        //Assert.IsTrue(testBall.Center.Y + testBall.MotionDirection.Y - testRadius >= 0);
+        //Assert.IsTrue(testBall.Center.Y + testBall.MotionDirection.Y + testRadius <= testHeight);
+
+        Assert.AreEqual(testBall.MotionDirection.X, -1);
+        Assert.AreEqual(testBall.MotionDirection.Y, 0);
+
+        Assert.AreEqual(testBall.Center.X, testX - 1);
+        Assert.AreEqual(testBall.Center.Y, testY);
     }
 }
