@@ -23,14 +23,15 @@ namespace Data
 
         public override void Move(int width, int height)
         {
-
-            if (!(0 <= (_center.X + _motionDirection.X - _radius) &&
-                     width >= (_center.X + _motionDirection.X + _radius) &&
-                     0 <= (_center.Y + _motionDirection.Y - _radius) &&
-                     height >= (_center.Y + _motionDirection.Y + _radius)))
+            if (0 > (_center.X + _motionDirection.X - _radius) ||
+                width < (_center.X + _motionDirection.X + _radius))
             {
-                //_motionDirection = new Point(random.Next(-1, 2), random.Next(-1, 2));
                 _motionDirection.X = -_motionDirection.X;
+            }
+
+            if (0 > (_center.Y + _motionDirection.Y - _radius) ||
+                height < (_center.Y + _motionDirection.Y + _radius))
+            {
                 _motionDirection.Y = -_motionDirection.Y;
             }
 
