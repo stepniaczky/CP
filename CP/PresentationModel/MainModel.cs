@@ -1,41 +1,61 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Logic;
+﻿using Logic;
+using System.Collections.ObjectModel;
+using System.Timers;
 
 namespace PresentationModel
 {
     internal class ModelApi : ModelAbstractApi
     {
-        private LogicApi LogicLayer;
-        private readonly int _width;
-        private readonly int _height;
-        public int Width { get =>  _width; } 
-        public int Height { get => _height; }
+        private readonly LogicApi LogicLayer;
+        private readonly Timer _timer = new Timer();
 
-        public override int Radius => 1/14 * Height;  //TODO responsiveness
-        public ModelApi() : this(LogicApi.CreateApi(Width, Height, Radius))
+        public ModelApi() : this(LogicApi.CreateApi(768, 460, 20))
         {
         }
 
         public ModelApi(LogicApi logicApi)
         {
-            LogicLayer = logicApi;
+            LogicLayer = logicApi ?? LogicApi.CreateApi(768, 460, 20);
         }
 
-        public override void CreateBalls(int ballsNumber)
+        public override ObservableCollection<Ball> CreateBalls(int ballsNumber)
         {
-            return LogicLayer.CreateBalls(ballsNumber);
-        }
-
-        public override List<object> GetBalls()
-        {
-            return LogicLayer.GetBalls();
+            LogicLayer.CreateBalls(ballsNumber);
+            Start();
+            return new ObservableCollection<Ball>(LogicLayer.Balls);
         }
 
         public override void ClearBalls()
         {
-            return LogicLayer.ClearBalls();
+            Stop();
+            LogicLayer.ClearBalls();
+        }
+
+        public override void Start()
+        {
+            _timer.Interval = 16;
+            _timer.Elapsed += OnTimerElapsed;
+            _timer.Start();
+        }
+
+        public override void Stop()
+        {
+            _timer.Stop();
+        }
+
+        private void OnTimerElapsed(object source, ElapsedEventArgs e)
+        {
+            LogicLayer.Tick();
+        }
+
+        public override void AttachObserver(IObserver observer)
+        {
+            LogicLayer.Attach(observer);
+        }
+
+        public override void RemoveObserver(IObserver observer)
+        {
+            LogicLayer.Detach(observer);
         }
     }
 }

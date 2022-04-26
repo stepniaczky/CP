@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using Logic;
-using System.Drawing;
+﻿using Logic;
+using System.Collections.ObjectModel;
 
 namespace PresentationModel
 {
@@ -11,13 +9,16 @@ namespace PresentationModel
         {
             return new ModelApi();
         }
-        public abstract int Radius { get; }
 
-        public abstract void CreateBalls(int ballsNumber);
-
-        public abstract List<Point> GetBalls();
+        public abstract ObservableCollection<Ball> CreateBalls(int ballsNumber);
 
         public abstract void ClearBalls();
+
+        public abstract void Start();
+        public abstract void Stop();
+
+        public abstract void AttachObserver(IObserver observer);
+        public abstract void RemoveObserver(IObserver observer);
     }
 }
 
