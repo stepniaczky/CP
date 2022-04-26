@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Logic;
-using System.Collections.Generic;
 using System.Drawing;
 
 namespace LogicTests;
@@ -47,18 +46,15 @@ public class BallTests
 
         int testWidth = testX + testRadius;
         int testHeight = 100;
-        int testHorizontalDirection = 1;
-        int testVerticalDirection = 1;
-        Point testDirection = new(testHorizontalDirection, testVerticalDirection);
+        Point testDirection = new (1, 0);
 
         testBall.MotionDirection = testDirection;
         testBall.Move(testWidth, testHeight);
 
-        Assert.AreEqual(testBall.MotionDirection.X, -testHorizontalDirection);
-        Assert.AreEqual(testBall.MotionDirection.Y, testVerticalDirection);
-
-        Assert.AreEqual(testBall.Center.X, testX - testHorizontalDirection);
-        Assert.AreEqual(testBall.Center.Y, testY + testVerticalDirection);
+        Assert.IsTrue(testBall.Center.X + testBall.MotionDirection.X - testRadius >= 0);
+        Assert.IsTrue(testBall.Center.X + testBall.MotionDirection.X + testRadius <= testWidth);
+        Assert.IsTrue(testBall.Center.Y + testBall.MotionDirection.Y - testRadius >= 0);
+        Assert.IsTrue(testBall.Center.Y + testBall.MotionDirection.Y + testRadius <= testHeight);
     }
 }
 
@@ -121,14 +117,4 @@ public class BallManagerTests
         Assert.AreEqual(testBallManager.Balls.Count, 0);
     }
 
-    [TestMethod]
-    public void TestGetBalls()
-    {
-        int testBallCount = 2;
-        testBallManager.CreateBalls(testBallCount);
-
-        List<Ball> points = testBallManager.GetBalls();
-
-        Assert.AreEqual(points.Count, testBallCount);
-    }
 }

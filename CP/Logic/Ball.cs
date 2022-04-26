@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace Logic
 {
@@ -8,7 +7,6 @@ namespace Logic
         private readonly int _radius;
         private Point _center;
         private Point _motionDirection;
-        private Random random = new Random();
 
         public int Radius { get => _radius; }
         public Point Center { get => _center; }

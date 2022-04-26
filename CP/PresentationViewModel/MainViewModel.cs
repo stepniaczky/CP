@@ -1,51 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Windows.Input;
+﻿using System.Collections.ObjectModel;
 using PresentationModel;
-using System.Drawing;
+using Logic;
 
 namespace PresentationViewModel
 {
-    public class MainViewModel : ViewModelBase
+    public class MainViewModel : ViewModelBase, IObserver
     {
-        private ObservableCollection<Point> b_BallsCollection;
-        private ModelAbstractApi ModelLayer = ModelAbstractApi.CreateApi(); // z inicjalizacja ?
-        private int b_Radius;
+        private readonly ModelAbstractApi ModelLayer;
         private int _ballsNumber;
         private bool _isStopEnabled;
+        private ObservableCollection<Ball> _ballsCollection;
 
         public RelayCommand StartCommand { get; set; }
         public RelayCommand StopCommand { get; set; }
 
-
         public MainViewModel() : this(ModelAbstractApi.CreateApi())
         {
-           
         }
-
         public MainViewModel(ModelAbstractApi modelAbstractApi)
         {
-            ModelLayer = modelAbstractApi;
-            BallsCollection = new ObservableCollection<Point>((IEnumerable<Point>)ModelLayer.GetBalls());
-            Radius = ModelLayer.Radius;
-            BallsNumber = 1;
-            IsStopEnabled = false;
+            ModelLayer = modelAbstractApi ?? ModelAbstractApi.CreateApi();
             StartCommand = new RelayCommand(OnStart, CanStart);
             StopCommand = new RelayCommand(OnStop, CanStop);
+            BallsNumber = 1;
+            _isStopEnabled = false;
         }
 
-        public ObservableCollection<Point> BallsCollection
+        public ObservableCollection<Ball> BallsCollection
         {
             get
             {
-                return b_BallsCollection;
+                return _ballsCollection;
             }
+
             set
             {
-                if (value.Equals(b_BallsCollection))
-                    return;
-                RaisePropertyChanged("BallsCollection");
+                _ballsCollection = value;
+                RaisePropertyChanged(nameof(BallsCollection));
             }
         }
 
@@ -62,60 +53,36 @@ namespace PresentationViewModel
             }
         }
 
-        public int Radius
-        {
-            get
-            {
-                return b_Radius;
-            }
-            set
-            {
-                if (value.Equals(b_Radius))
-                    return;
-                b_Radius = value;
-                RaisePropertyChanged("Radious");
-            }
-        }
-
-        public bool IsStopEnabled
-        {
-            get
-            {
-                return _isStopEnabled;
-            }
-
-            set
-            {
-                _isStopEnabled = value;
-                StopCommand.RaiseCanExecuteChanged();
-                StartCommand.RaiseCanExecuteChanged();
-
-            }
-        }
-
 
         private void OnStart()
         {
             ModelLayer.CreateBalls(BallsNumber);
-            RaisePropertyChanged("GetBalls");
-            IsStopEnabled = true;
+            ModelLayer.AttachObserver(this);
+            _isStopEnabled = true;
+            StopCommand.RaiseCanExecuteChanged();
         }
 
         private bool CanStart()
         {
-            return IsStopEnabled == false;
+            return _isStopEnabled == false;
         }
 
         private void OnStop()
         {
             ModelLayer.ClearBalls();
-            RaisePropertyChanged("GetBalls");
-            IsStopEnabled = false;
+            ModelLayer.RemoveObserver(this);
+            _isStopEnabled = false;
+            StartCommand.RaiseCanExecuteChanged();
         }
 
         private bool CanStop()
         {
-            return IsStopEnabled;
+            return _isStopEnabled;
+        }
+
+        public void Update(ISubject subject)
+        {
+            BallsCollection = new ObservableCollection<Ball>(subject.Balls);
         }
     }
 }
