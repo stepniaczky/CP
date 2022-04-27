@@ -13,6 +13,7 @@ namespace Logic
         public abstract int Width { get; }
         public abstract int Height { get; }
         public abstract int Radius { get; }
+        public abstract int MaxSpeed { get; }
 
         public abstract void CreateBalls(int amount);
 

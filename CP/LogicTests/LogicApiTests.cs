@@ -84,24 +84,17 @@ public class BallManagerTests
 
         Assert.AreEqual(testBallManager.Balls.Count, testBallCount);
 
-        Assert.IsTrue(testBallManager.Balls[0].Center.X - testRadius >= 0);
-        Assert.IsTrue(testBallManager.Balls[0].Center.X + testRadius <= testWidth);
-        Assert.IsTrue(testBallManager.Balls[0].Center.Y - testRadius >= 0);
-        Assert.IsTrue(testBallManager.Balls[0].Center.Y + testRadius <= testHeight);
-        Assert.IsTrue(testBallManager.Balls[0].MotionDirection.X <= 1);
-        Assert.IsTrue(testBallManager.Balls[0].MotionDirection.X >= -1);
-        Assert.IsTrue(testBallManager.Balls[0].MotionDirection.Y <= 1);
-        Assert.IsTrue(testBallManager.Balls[0].MotionDirection.Y >= -1);
-
-
-        Assert.IsTrue(testBallManager.Balls[1].Center.X - testRadius >= 0);
-        Assert.IsTrue(testBallManager.Balls[1].Center.X + testRadius <= testWidth);
-        Assert.IsTrue(testBallManager.Balls[1].Center.Y - testRadius >= 0);
-        Assert.IsTrue(testBallManager.Balls[1].Center.Y + testRadius <= testHeight);
-        Assert.IsTrue(testBallManager.Balls[1].MotionDirection.X <= 1);
-        Assert.IsTrue(testBallManager.Balls[1].MotionDirection.X >= -1);
-        Assert.IsTrue(testBallManager.Balls[1].MotionDirection.Y <= 1);
-        Assert.IsTrue(testBallManager.Balls[1].MotionDirection.Y >= -1);
+        foreach (Ball ball in testBallManager.Balls)
+        {
+            Assert.IsTrue(ball.Center.X - testRadius >= 0);
+            Assert.IsTrue(ball.Center.X + testRadius <= testWidth);
+            Assert.IsTrue(ball.Center.Y - testRadius >= 0);
+            Assert.IsTrue(ball.Center.Y + testRadius <= testHeight);
+            Assert.IsTrue(ball.MotionDirection.X <= testBallManager.MaxSpeed);
+            Assert.IsTrue(ball.MotionDirection.X >= -testBallManager.MaxSpeed);
+            Assert.IsTrue(ball.MotionDirection.Y <= testBallManager.MaxSpeed);
+            Assert.IsTrue(ball.MotionDirection.Y >= -testBallManager.MaxSpeed);
+        }
     }
 
     [TestMethod]
