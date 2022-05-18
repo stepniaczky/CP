@@ -10,7 +10,7 @@ namespace PresentationModel
             return new ModelApi();
         }
 
-        public abstract ObservableCollection<Ball> CreateBalls(int ballsNumber);
+        public abstract ObservableCollection<LogicBall> CreateBalls(int ballsNumber);
 
         public abstract void ClearBalls();
 

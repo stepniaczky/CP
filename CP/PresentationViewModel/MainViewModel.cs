@@ -9,7 +9,7 @@ namespace PresentationViewModel
         private readonly ModelAbstractApi ModelLayer;
         private int _ballsNumber;
         private bool _isStopEnabled;
-        private ObservableCollection<Ball> _ballsCollection;
+        private ObservableCollection<LogicBall> _ballsCollection;
 
         public RelayCommand StartCommand { get; set; }
         public RelayCommand StopCommand { get; set; }
@@ -26,7 +26,7 @@ namespace PresentationViewModel
             _isStopEnabled = false;
         }
 
-        public ObservableCollection<Ball> BallsCollection
+        public ObservableCollection<LogicBall> BallsCollection
         {
             get
             {
@@ -82,7 +82,7 @@ namespace PresentationViewModel
 
         public void Update(ISubject subject)
         {
-            BallsCollection = new ObservableCollection<Ball>(subject.Balls);
+            BallsCollection = new ObservableCollection<LogicBall>(subject.LogicBalls);
         }
     }
 }

@@ -18,11 +18,11 @@ namespace PresentationModel
             LogicLayer = logicApi ?? LogicApi.CreateApi(768, 460, 20);
         }
 
-        public override ObservableCollection<Ball> CreateBalls(int ballsNumber)
+        public override ObservableCollection<LogicBall> CreateBalls(int ballsNumber)
         {
             LogicLayer.CreateBalls(ballsNumber);
             Start();
-            return new ObservableCollection<Ball>(LogicLayer.Balls);
+            return new ObservableCollection<LogicBall>(LogicLayer.LogicBalls);
         }
 
         public override void ClearBalls()

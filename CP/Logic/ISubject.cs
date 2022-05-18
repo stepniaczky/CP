@@ -4,7 +4,7 @@ namespace Logic
 {
     public interface ISubject
     {
-        List<Ball> Balls { get; }
+        List<LogicBall> LogicBalls { get; }
 
         void Attach(IObserver observer);
         void Detach(IObserver observer);

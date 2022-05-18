@@ -10,7 +10,7 @@ public class BallTests
     static readonly int testX = 10;
     static readonly int testY = 7;
     static readonly int testRadius = 2;
-    readonly Ball testBall = new(testX, testY, testRadius);
+    readonly LogicBall testBall = new(testX, testY, testRadius);
 
     [TestMethod]
     public void TestConstructor()
@@ -84,7 +84,7 @@ public class BallManagerTests
 
         Assert.AreEqual(testBallManager.Balls.Count, testBallCount);
 
-        foreach (Ball ball in testBallManager.Balls)
+        foreach (LogicBall ball in testBallManager.Balls)
         {
             Assert.IsTrue(ball.Center.X - testRadius >= 0);
             Assert.IsTrue(ball.Center.X + testRadius <= testWidth);

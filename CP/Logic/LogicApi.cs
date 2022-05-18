@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Data;
 
 namespace Logic
 {
@@ -10,10 +11,13 @@ namespace Logic
         }
 
         public abstract List<Ball> Balls { get; }
+        public abstract List<LogicBall> LogicBalls { get; }
         public abstract int Width { get; }
         public abstract int Height { get; }
         public abstract int Radius { get; }
         public abstract int MaxSpeed { get; }
+
+       
 
         public abstract void CreateBalls(int amount);
 

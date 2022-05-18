@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using Data;
 
 namespace Logic
 {
@@ -11,9 +12,10 @@ namespace Logic
 		private readonly int _radius;
 		private readonly int _maxSpeed = 2;
 		private readonly List<Ball> _balls = new List<Ball>();
+		private readonly List<LogicBall> _logicBalls = new List<LogicBall>();
 		private readonly List<IObserver> _observers = new List<IObserver>();
 
-        public BallManager(int width, int height, int radius)
+		public BallManager(int width, int height, int radius)
 		{
 			_width = width;
 			_height = height;
@@ -24,9 +26,12 @@ namespace Logic
 		public override int Height { get => _height; }
 		public override int Radius { get => _radius; }
 		public override List<Ball> Balls { get => _balls; }
+		public override List<LogicBall> LogicBalls { get => _logicBalls; }
 		public override int MaxSpeed { get => _maxSpeed; }
 
-		public override void CreateBalls(int amount)
+        
+
+        public override void CreateBalls(int amount)
         {
 			Random random = new Random();
 
@@ -49,6 +54,8 @@ namespace Logic
                     MotionDirection = motionDirection
                 };
                 _balls.Add(ball);
+
+				_logicBalls.Add(new LogicBall(x, y, _radius));
             }
 		}
 
