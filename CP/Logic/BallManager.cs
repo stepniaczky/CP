@@ -59,7 +59,22 @@ namespace Logic
             }
 		}
 
-        public override void ClearBalls()
+		private void CheckEdgeBounces(Ball ball)
+        {
+			if (0 > (ball.Center.X + ball.MotionDirection.X - ball.Radius) ||
+				_width < (ball.Center.X + ball.MotionDirection.X + ball.Radius))
+			{
+				ball.MotionDirection = new Point(-ball.MotionDirection.X, ball.MotionDirection.Y);
+			}
+
+			if (0 > (ball.Center.Y + ball.MotionDirection.Y - ball.Radius) ||
+				_height < (ball.Center.Y + ball.MotionDirection.Y + ball.Radius))
+			{
+				ball.MotionDirection = new Point(ball.MotionDirection.X, -ball.MotionDirection.Y);
+			}
+		}
+
+		public override void ClearBalls()
         {
 			Balls.Clear();
 			LogicBalls.Clear();
@@ -88,7 +103,8 @@ namespace Logic
 		{
 			for (int i = 0; i < _balls.Count; i++)
 			{
-				_balls[i].Move(_width, _height);
+				CheckEdgeBounces(_balls[i]);
+				_balls[i].Move();
 				_logicBalls[i].Center = _balls[i].Center;
 				Notify();
 			}

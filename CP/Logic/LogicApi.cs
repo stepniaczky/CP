@@ -30,7 +30,5 @@ namespace Logic
         public abstract void Notify();
 
         public abstract void Tick();
-
-
     }
 }
