@@ -10,7 +10,7 @@ namespace Logic
             return new BallManager(width, height, radius);
         }
 
-        public abstract List<Ball> Balls { get; }
+        public abstract List<DataApi> Balls { get; }
         public abstract List<LogicBall> LogicBalls { get; }
         public abstract int Width { get; }
         public abstract int Height { get; }

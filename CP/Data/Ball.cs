@@ -2,7 +2,7 @@
 
 namespace Data
 {
-    public class Ball : DataApi
+    internal class Ball : DataApi
     {
         private readonly int _radius;
         private Point _center;

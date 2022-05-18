@@ -9,6 +9,10 @@ namespace Data
         public abstract Point Center { get; }
         public abstract Point MotionDirection { get; set; }
 
+        public static DataApi CreateBall(int x, int y, int radius)
+        {
+            return new Ball(x, y, radius);
+        }
 
         public abstract void Move();
     }
