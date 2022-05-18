@@ -6,11 +6,9 @@ namespace Logic
     {
         private readonly int _radius;
         private Point _center;
-        private Point _motionDirection;
 
         public int Radius { get => _radius; }
-        public Point Center { get => _center; }
-        public Point MotionDirection { get => _motionDirection; }
+        public Point Center { get => _center; set => _center = value; }
 
         public LogicBall(int x, int y, int radius)
         {

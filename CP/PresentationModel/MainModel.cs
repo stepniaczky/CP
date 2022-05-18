@@ -7,7 +7,7 @@ namespace PresentationModel
     internal class ModelApi : ModelAbstractApi
     {
         private readonly LogicApi LogicLayer;
-        private readonly Timer _timer = new Timer();
+        private Timer _timer;
 
         public ModelApi() : this(LogicApi.CreateApi(768, 460, 20))
         {
@@ -33,6 +33,7 @@ namespace PresentationModel
 
         public override void Start()
         {
+            _timer = new Timer();
             _timer.Interval = 16;
             _timer.Elapsed += OnTimerElapsed;
             _timer.Start();
@@ -40,7 +41,7 @@ namespace PresentationModel
 
         public override void Stop()
         {
-            _timer.Stop();
+            _timer.Dispose();
         }
 
         private void OnTimerElapsed(object source, ElapsedEventArgs e)

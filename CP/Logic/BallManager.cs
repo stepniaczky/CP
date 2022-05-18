@@ -62,6 +62,7 @@ namespace Logic
         public override void ClearBalls()
         {
 			Balls.Clear();
+			LogicBalls.Clear();
 			Notify();
         }
 
@@ -85,9 +86,10 @@ namespace Logic
 
 		public override void Tick()
 		{
-			foreach (Ball ball in _balls)
+			for (int i = 0; i < _balls.Count; i++)
 			{
-				ball.Move(_width, _height);
+				_balls[i].Move(_width, _height);
+				_logicBalls[i].Center = _balls[i].Center;
 				Notify();
 			}
 		}
