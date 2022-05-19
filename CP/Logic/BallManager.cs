@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
-using System.Linq;
 using Data;
 
 namespace Logic
@@ -32,7 +31,6 @@ namespace Logic
 		public override int Radius { get => _radius; }
 		public override List<DataApi> Balls { get => _balls; }
 		public override List<LogicBall> LogicBalls { get => _logicBalls; }
-		public override List<Thread> Threads { get => _threads; }
 		public override int MaxSpeed { get => _maxSpeed; }
 
         
@@ -179,11 +177,11 @@ namespace Logic
 		public override void Attach(IObserver observer)
 		{
 			_observers.Add(observer);
-		}
+        }
 
-		public override void Detach(IObserver observer)
-		{
-			_observers.Remove(observer);
+        public override void Detach(IObserver observer)
+        {
+            _observers.Remove(observer);
 		}
 
 		public override void Notify()
