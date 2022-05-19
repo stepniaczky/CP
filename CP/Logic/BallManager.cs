@@ -56,7 +56,7 @@ namespace Logic
 
 				if (_balls.Count > 0 )
                 {
-					Boolean invalidPosition = true;
+					bool invalidPosition = true;
 					while (invalidPosition)
 					{
 						invalidPosition = false;
@@ -112,7 +112,7 @@ namespace Logic
 		}
         
 
-		private void CheckEdgeCollisions(DataApi ball)
+		public override void CheckEdgeCollisions(DataApi ball)
         {
 			if (0 > (ball.Center.X + ball.MotionDirection.X - ball.Radius) ||
 				_width < (ball.Center.X + ball.MotionDirection.X + ball.Radius))
@@ -127,7 +127,7 @@ namespace Logic
 			}
 		}
 
-		private void CheckBallCollisions(DataApi ball)
+		public override void CheckBallCollisions(DataApi ball)
 		{
 
 			List<DataApi> collidingBalls = new List<DataApi>();

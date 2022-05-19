@@ -21,6 +21,10 @@ namespace Logic
 
         public abstract void CreateBalls(int amount);
 
+        public abstract void CheckEdgeCollisions(DataApi ball);
+
+        public abstract void CheckBallCollisions(DataApi ball);
+
         public abstract void ClearBalls();
 
         public abstract void Attach(IObserver observer);

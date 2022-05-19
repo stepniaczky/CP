@@ -40,7 +40,10 @@ public class BallManagerTests
             Assert.IsTrue(ball.MotionDirection.X >= -testBallManager.MaxSpeed);
             Assert.IsTrue(ball.MotionDirection.Y <= testBallManager.MaxSpeed);
             Assert.IsTrue(ball.MotionDirection.Y >= -testBallManager.MaxSpeed);
+
+            
         }
+        Assert.AreEqual(testBallManager.LogicBalls.Count, testBallCount);
     }
 
     [TestMethod]
@@ -54,6 +57,38 @@ public class BallManagerTests
         testBallManager.ClearBalls();
 
         Assert.AreEqual(testBallManager.Balls.Count, 0);
+        Assert.AreEqual(testBallManager.LogicBalls.Count, 0);
     }
 
+    [TestMethod]
+    public void TestCheckEdgeCollision()
+    {
+        Point testDirection = new(1, 0);
+        DataApi testBall = DataApi.CreateBall(testWidth - testRadius, 100, testRadius, 1);
+
+        testBall.MotionDirection = testDirection;
+        testBallManager.CheckEdgeCollisions(testBall);
+        testBall.Move();
+
+        Assert.IsTrue(testBall.Center.X + testBall.MotionDirection.X - testRadius >= 0);
+        Assert.IsTrue(testBall.Center.X + testBall.MotionDirection.X + testRadius <= testWidth);
+        Assert.IsTrue(testBall.Center.Y + testBall.MotionDirection.Y - testRadius >= 0);
+        Assert.IsTrue(testBall.Center.Y + testBall.MotionDirection.Y + testRadius <= testHeight);
+    }
+
+    [TestMethod]
+    public void TestCheckBallCollision()
+    {
+        Point testDirection = new(1, 0);
+        DataApi testBall = DataApi.CreateBall(testWidth - testRadius, 100, testRadius, 1);
+
+        testBall.MotionDirection = testDirection;
+        testBallManager.CheckEdgeCollisions(testBall);
+        testBall.Move();
+
+        Assert.IsTrue(testBall.Center.X + testBall.MotionDirection.X - testRadius >= 0);
+        Assert.IsTrue(testBall.Center.X + testBall.MotionDirection.X + testRadius <= testWidth);
+        Assert.IsTrue(testBall.Center.Y + testBall.MotionDirection.Y - testRadius >= 0);
+        Assert.IsTrue(testBall.Center.Y + testBall.MotionDirection.Y + testRadius <= testHeight);
+    }
 }
