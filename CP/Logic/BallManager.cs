@@ -100,7 +100,7 @@ namespace Logic
 						CheckBallCollisions(ball);
 						ball.Move();
 						UpdatCorrespondingLogicBall(ball);
-						Thread.Sleep(5);
+						Thread.Sleep(15);
                     }
 				});
 
@@ -130,41 +130,41 @@ namespace Logic
 		}
 
 		private void CheckBallCollisions(DataApi ball)
-        {
-			
+		{
+
 			List<DataApi> collidingBalls = new List<DataApi>();
 			foreach (DataApi otherBall in _balls)
 			{
 				if (!otherBall.Equals(ball))
-                {
-					double distance = Math.Sqrt( Math.Pow((ball.Center.X + ball.MotionDirection.X - otherBall.Center.X + otherBall.MotionDirection.X), 2) +
-												Math.Pow((ball.Center.Y + ball.MotionDirection.Y - otherBall.Center.Y + otherBall.MotionDirection.Y), 2) );
+				{
+					double distance = Math.Sqrt(Math.Pow((ball.Center.X + ball.MotionDirection.X - (otherBall.Center.X + otherBall.MotionDirection.X)), 2) +
+												Math.Pow((ball.Center.Y + ball.MotionDirection.Y - (otherBall.Center.Y + otherBall.MotionDirection.Y)), 2));
 
-					if (distance <= ball.Radius + otherBall.Radius) 
+					if ((distance <= ball.Radius + otherBall.Radius))
 					{
-						collidingBalls.Add(otherBall); 
+						collidingBalls.Add(otherBall);
 					}
-                }
+				}
 			}
 
 			lock (_collideBalls)
-            {
+			{
 				foreach (DataApi otherBall in collidingBalls)
 				{
-					double ballXVelocity = (ball.MotionDirection.X * (ball.Mass - otherBall.Mass) / (ball.Mass + otherBall.Mass) + 
+					double ballXVelocity = (ball.MotionDirection.X * (ball.Mass - otherBall.Mass) / (ball.Mass + otherBall.Mass) +
 											(2 * otherBall.Mass * otherBall.MotionDirection.X) / (ball.Mass + otherBall.Mass));
-					double ballYVelocity = (ball.MotionDirection.Y * (ball.Mass - otherBall.Mass) / (ball.Mass + otherBall.Mass) + 
+					double ballYVelocity = (ball.MotionDirection.Y * (ball.Mass - otherBall.Mass) / (ball.Mass + otherBall.Mass) +
 											(2 * otherBall.Mass * otherBall.MotionDirection.Y) / (ball.Mass + otherBall.Mass));
 
-					double otherBallXVelocity = (otherBall.MotionDirection.X * (otherBall.Mass - ball.Mass) / (ball.Mass + otherBall.Mass) + 
+					double otherBallXVelocity = (otherBall.MotionDirection.X * (otherBall.Mass - ball.Mass) / (ball.Mass + otherBall.Mass) +
 												(2 * ball.Mass * ball.MotionDirection.X) / (ball.Mass + otherBall.Mass));
-					double otherBallYVelocity = (otherBall.MotionDirection.Y * (otherBall.Mass - ball.Mass) / (ball.Mass + otherBall.Mass) + 
+					double otherBallYVelocity = (otherBall.MotionDirection.Y * (otherBall.Mass - ball.Mass) / (ball.Mass + otherBall.Mass) +
 												(2 * ball.Mass * ball.MotionDirection.Y) / (ball.Mass + otherBall.Mass));
 
 					ball.MotionDirection = new Point((int)ballXVelocity, (int)ballYVelocity);
 					otherBall.MotionDirection = new Point((int)otherBallXVelocity, (int)otherBallYVelocity);
 				}
-            }
+			}
 		}
 
 		public override void ClearBalls()
