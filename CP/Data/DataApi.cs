@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.ComponentModel;
 
 namespace Data
 {
@@ -14,6 +15,8 @@ namespace Data
         {
             return new Ball(x, y, radius, mass);
         }
+
+        public abstract event PropertyChangedEventHandler PropertyChanged;
 
         public abstract void Move();
     }

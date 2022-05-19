@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Threading;
+using System.Linq;
 using Data;
 
 namespace Logic
@@ -14,7 +16,9 @@ namespace Logic
 		private readonly int _maxSpeed = 2;
 		private readonly List<DataApi> _balls = new List<DataApi>();
 		private readonly List<LogicBall> _logicBalls = new List<LogicBall>();
+		private readonly List<Thread> _threads = new List<Thread>();
 		private readonly List<IObserver> _observers = new List<IObserver>();
+		private object _collideBalls = new object();
 
 		public BallManager(int width, int height, int radius)
 		{
@@ -28,6 +32,7 @@ namespace Logic
 		public override int Radius { get => _radius; }
 		public override List<DataApi> Balls { get => _balls; }
 		public override List<LogicBall> LogicBalls { get => _logicBalls; }
+		public override List<Thread> Threads { get => _threads; }
 		public override int MaxSpeed { get => _maxSpeed; }
 
         
@@ -68,18 +73,46 @@ namespace Logic
 								invalidPosition = true;
 							}
 						}
-
 					}
 				}
-				
 
 				DataApi ball = DataApi.CreateBall(x, y, _radius, _mass);
 				ball.MotionDirection = motionDirection;
 
                 _balls.Add(ball);
 				_logicBalls.Add(new LogicBall(x, y, _radius));
+
             }
+
+			CreateThreads();
 		}
+
+		private void CreateThreads()
+        {
+			foreach (DataApi ball in _balls)
+            {
+				Thread thread = new Thread(() =>
+				{
+					while (_balls.Count != 0)
+                    {
+						
+						CheckEdgeCollisions(ball);
+						CheckBallCollisions(ball);
+						ball.Move();
+						UpdatCorrespondingLogicBall(ball);
+						Thread.Sleep(5);
+                    }
+				});
+
+				_threads.Add(thread);
+			}
+
+			foreach (var thread in _threads)
+			{
+				thread.Start();
+			}
+		}
+        
 
 		private void CheckEdgeCollisions(DataApi ball)
         {
@@ -98,6 +131,7 @@ namespace Logic
 
 		private void CheckBallCollisions(DataApi ball)
         {
+			
 			List<DataApi> collidingBalls = new List<DataApi>();
 			foreach (DataApi otherBall in _balls)
 			{
@@ -113,28 +147,32 @@ namespace Logic
                 }
 			}
 
-			foreach (DataApi otherBall in collidingBalls)  // sekcja krytyczna
+			lock (_collideBalls)
             {
+				foreach (DataApi otherBall in collidingBalls)
+				{
+					double ballXVelocity = (ball.MotionDirection.X * (ball.Mass - otherBall.Mass) / (ball.Mass + otherBall.Mass) + 
+											(2 * otherBall.Mass * otherBall.MotionDirection.X) / (ball.Mass + otherBall.Mass));
+					double ballYVelocity = (ball.MotionDirection.Y * (ball.Mass - otherBall.Mass) / (ball.Mass + otherBall.Mass) + 
+											(2 * otherBall.Mass * otherBall.MotionDirection.Y) / (ball.Mass + otherBall.Mass));
 
-				double ballXVelocity = (ball.MotionDirection.X * (ball.Mass - otherBall.Mass) / (ball.Mass + otherBall.Mass) + 
-										(2 * otherBall.Mass * otherBall.MotionDirection.X) / (ball.Mass + otherBall.Mass));
-				double ballYVelocity = (ball.MotionDirection.Y * (ball.Mass - otherBall.Mass) / (ball.Mass + otherBall.Mass) + 
-										(2 * otherBall.Mass * otherBall.MotionDirection.Y) / (ball.Mass + otherBall.Mass));
+					double otherBallXVelocity = (otherBall.MotionDirection.X * (otherBall.Mass - ball.Mass) / (ball.Mass + otherBall.Mass) + 
+												(2 * ball.Mass * ball.MotionDirection.X) / (ball.Mass + otherBall.Mass));
+					double otherBallYVelocity = (otherBall.MotionDirection.Y * (otherBall.Mass - ball.Mass) / (ball.Mass + otherBall.Mass) + 
+												(2 * ball.Mass * ball.MotionDirection.Y) / (ball.Mass + otherBall.Mass));
 
-				double otherBallXVelocity = (otherBall.MotionDirection.X * (otherBall.Mass - ball.Mass) / (ball.Mass + otherBall.Mass) + 
-											(2 * ball.Mass * ball.MotionDirection.X) / (ball.Mass + otherBall.Mass));
-				double otherBallYVelocity = (otherBall.MotionDirection.Y * (otherBall.Mass - ball.Mass) / (ball.Mass + otherBall.Mass) + 
-											(2 * ball.Mass * ball.MotionDirection.Y) / (ball.Mass + otherBall.Mass));
-
-				ball.MotionDirection = new Point((int)ballXVelocity, (int)ballYVelocity);
-				otherBall.MotionDirection = new Point((int)otherBallXVelocity, (int)otherBallYVelocity);
-			}
+					ball.MotionDirection = new Point((int)ballXVelocity, (int)ballYVelocity);
+					otherBall.MotionDirection = new Point((int)otherBallXVelocity, (int)otherBallYVelocity);
+				}
+            }
 		}
 
 		public override void ClearBalls()
         {
-			Balls.Clear();
-			LogicBalls.Clear();
+			_threads.Clear();
+			_balls.Clear();
+			_logicBalls.Clear();
+			
 			Notify();
         }
 
@@ -156,16 +194,11 @@ namespace Logic
 			}
 		}
 
-		public override void Tick()
-		{
-			for (int i = 0; i < _balls.Count; i++)
-			{
-				CheckEdgeCollisions(_balls[i]);
-				CheckBallCollisions(_balls[i]);
-				_balls[i].Move();
-				_logicBalls[i].Center = _balls[i].Center;
-				Notify();
-			}
+		private void UpdatCorrespondingLogicBall(DataApi ball)
+        {
+			int index = _balls.IndexOf(ball);
+			_logicBalls[index].Center = ball.Center;
+			Notify();
 		}
 	}
 }

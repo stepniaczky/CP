@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using Data;
 
 namespace Logic
@@ -12,6 +13,7 @@ namespace Logic
 
         public abstract List<DataApi> Balls { get; }
         public abstract List<LogicBall> LogicBalls { get; }
+        public abstract List<Thread> Threads { get; }
         public abstract int Width { get; }
         public abstract int Height { get; }
         public abstract int Radius { get; }
@@ -29,6 +31,5 @@ namespace Logic
 
         public abstract void Notify();
 
-        public abstract void Tick();
     }
 }

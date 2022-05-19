@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.ComponentModel;
+using System.Drawing;
 
 namespace Data
 {
@@ -21,6 +22,8 @@ namespace Data
             _radius = radius;
             _mass = mass;
         }
+
+        public override event PropertyChangedEventHandler PropertyChanged;
 
         public override void Move()
         {
