@@ -23,8 +23,6 @@ namespace Data
             _mass = mass;
         }
 
-        public override event PropertyChangedEventHandler PropertyChanged;
-
         public override void Move()
         {
             _center.Offset(_motionDirection);

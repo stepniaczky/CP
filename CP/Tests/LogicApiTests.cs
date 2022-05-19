@@ -1,63 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Logic;
 using System.Drawing;
+using Data;
 
-namespace LogicTests;
-
-[TestClass]
-public class BallTests
-{
-    static readonly int testX = 10;
-    static readonly int testY = 7;
-    static readonly int testRadius = 2;
-    readonly LogicBall testBall = new(testX, testY, testRadius);
-
-    [TestMethod]
-    public void TestConstructor()
-    {
-        Assert.AreEqual(testX, testBall.Center.X);
-        Assert.AreEqual(testY, testBall.Center.Y);
-        Assert.AreEqual(testRadius, testBall.Radius);
-    }
-
-    [TestMethod]
-    public void TestMoveDirectionNotSet()
-    {
-        testBall.Move(100, 100);
-
-        Assert.AreEqual(testX, testBall.Center.X);
-        Assert.AreEqual(testY, testBall.Center.Y);
-    }
-
-    [TestMethod]
-    public void TestMoveDirectionSet()
-    {
-        Point testDirection = new(1, 0);
-        testBall.MotionDirection = testDirection;
-        testBall.Move(100, 100);
-
-        Assert.AreEqual(testX + testDirection.X, testBall.Center.X);
-        Assert.AreEqual(testY + testDirection.Y, testBall.Center.Y);
-    }
-
-    [TestMethod]
-    public void TestMoveBallOutOfBounds()
-    {
-
-        int testWidth = testX + testRadius;
-        int testHeight = 100;
-        Point testDirection = new (1, 0);
-
-        testBall.MotionDirection = testDirection;
-        testBall.Move(testWidth, testHeight);
-
-        Assert.IsTrue(testBall.Center.X + testBall.MotionDirection.X - testRadius >= 0);
-        Assert.IsTrue(testBall.Center.X + testBall.MotionDirection.X + testRadius <= testWidth);
-        Assert.IsTrue(testBall.Center.Y + testBall.MotionDirection.Y - testRadius >= 0);
-        Assert.IsTrue(testBall.Center.Y + testBall.MotionDirection.Y + testRadius <= testHeight);
-    }
-}
-
+namespace Tests;
 
 [TestClass]
 public class BallManagerTests
@@ -84,7 +30,7 @@ public class BallManagerTests
 
         Assert.AreEqual(testBallManager.Balls.Count, testBallCount);
 
-        foreach (LogicBall ball in testBallManager.Balls)
+        foreach (DataApi ball in testBallManager.Balls)
         {
             Assert.IsTrue(ball.Center.X - testRadius >= 0);
             Assert.IsTrue(ball.Center.X + testRadius <= testWidth);
