@@ -145,20 +145,20 @@ namespace Logic
 				}
 			}
 
-			lock (_collideBalls)
+			
+			foreach (DataApi otherBall in collidingBalls)
 			{
-				foreach (DataApi otherBall in collidingBalls)
+				double ballXVelocity = (ball.MotionDirection.X * (ball.Mass - otherBall.Mass) / (ball.Mass + otherBall.Mass) +
+										(2 * otherBall.Mass * otherBall.MotionDirection.X) / (ball.Mass + otherBall.Mass));
+				double ballYVelocity = (ball.MotionDirection.Y * (ball.Mass - otherBall.Mass) / (ball.Mass + otherBall.Mass) +
+										(2 * otherBall.Mass * otherBall.MotionDirection.Y) / (ball.Mass + otherBall.Mass));
+
+				double otherBallXVelocity = (otherBall.MotionDirection.X * (otherBall.Mass - ball.Mass) / (ball.Mass + otherBall.Mass) +
+											(2 * ball.Mass * ball.MotionDirection.X) / (ball.Mass + otherBall.Mass));
+				double otherBallYVelocity = (otherBall.MotionDirection.Y * (otherBall.Mass - ball.Mass) / (ball.Mass + otherBall.Mass) +
+											(2 * ball.Mass * ball.MotionDirection.Y) / (ball.Mass + otherBall.Mass));
+				lock (_collideBalls)
 				{
-					double ballXVelocity = (ball.MotionDirection.X * (ball.Mass - otherBall.Mass) / (ball.Mass + otherBall.Mass) +
-											(2 * otherBall.Mass * otherBall.MotionDirection.X) / (ball.Mass + otherBall.Mass));
-					double ballYVelocity = (ball.MotionDirection.Y * (ball.Mass - otherBall.Mass) / (ball.Mass + otherBall.Mass) +
-											(2 * otherBall.Mass * otherBall.MotionDirection.Y) / (ball.Mass + otherBall.Mass));
-
-					double otherBallXVelocity = (otherBall.MotionDirection.X * (otherBall.Mass - ball.Mass) / (ball.Mass + otherBall.Mass) +
-												(2 * ball.Mass * ball.MotionDirection.X) / (ball.Mass + otherBall.Mass));
-					double otherBallYVelocity = (otherBall.MotionDirection.Y * (otherBall.Mass - ball.Mass) / (ball.Mass + otherBall.Mass) +
-												(2 * ball.Mass * ball.MotionDirection.Y) / (ball.Mass + otherBall.Mass));
-
 					ball.MotionDirection = new Point((int)ballXVelocity, (int)ballYVelocity);
 					otherBall.MotionDirection = new Point((int)otherBallXVelocity, (int)otherBallYVelocity);
 				}
