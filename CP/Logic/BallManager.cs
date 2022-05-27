@@ -18,6 +18,7 @@ namespace Logic
 		private readonly List<Thread> _threads = new List<Thread>();
 		private readonly List<IObserver> _observers = new List<IObserver>();
 		private object _collideBalls = new object();
+		private object _serialize = new object();
 
 		public BallManager(int width, int height, int radius)
 		{
@@ -114,17 +115,29 @@ namespace Logic
 
 		public override void CheckEdgeCollisions(DataApi ball)
         {
+			bool write = false;
 			if (0 > (ball.Center.X + ball.MotionDirection.X - ball.Radius) ||
 				_width < (ball.Center.X + ball.MotionDirection.X + ball.Radius))
 			{
 				ball.MotionDirection = new Point(-ball.MotionDirection.X, ball.MotionDirection.Y);
+				write = true;
 			}
 
 			if (0 > (ball.Center.Y + ball.MotionDirection.Y - ball.Radius) ||
 				_height < (ball.Center.Y + ball.MotionDirection.Y + ball.Radius))
 			{
 				ball.MotionDirection = new Point(ball.MotionDirection.X, -ball.MotionDirection.Y);
+				write = true;
+
 			}
+
+			if (write) {
+				BallDAO dao = new BallDAO($"ball_{_balls.IndexOf(ball)}.json");
+				lock (_serialize)
+				{
+					dao.write(ball);
+				}
+            }
 		}
 
 		public override void CheckBallCollisions(DataApi ball)
@@ -157,15 +170,20 @@ namespace Logic
 											(2 * ball.Mass * ball.MotionDirection.X) / (ball.Mass + otherBall.Mass));
 				double otherBallYVelocity = (otherBall.MotionDirection.Y * (otherBall.Mass - ball.Mass) / (ball.Mass + otherBall.Mass) +
 											(2 * ball.Mass * ball.MotionDirection.Y) / (ball.Mass + otherBall.Mass));
-				BallDAO dao1 = new BallDAO($"ball_{ball.GetHashCode()}.json");
+
+				BallDAO dao1 = new BallDAO($"ball_{_balls.IndexOf(ball)}.json");
 				BallDAO dao2 = new BallDAO($"ball_{_balls.IndexOf(otherBall)}.json");
+
 				lock (_collideBalls)
 				{
 					ball.MotionDirection = new Point((int)ballXVelocity, (int)ballYVelocity);
 					otherBall.MotionDirection = new Point((int)otherBallXVelocity, (int)otherBallYVelocity);
-					dao2.write(otherBall);
-					dao1.write(ball);
 				}
+				lock(_serialize)
+                {	
+					dao1.write(ball);
+					dao2.write(otherBall);
+                }
 			}
 		}
 
