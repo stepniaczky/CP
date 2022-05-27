@@ -157,12 +157,14 @@ namespace Logic
 											(2 * ball.Mass * ball.MotionDirection.X) / (ball.Mass + otherBall.Mass));
 				double otherBallYVelocity = (otherBall.MotionDirection.Y * (otherBall.Mass - ball.Mass) / (ball.Mass + otherBall.Mass) +
 											(2 * ball.Mass * ball.MotionDirection.Y) / (ball.Mass + otherBall.Mass));
+				BallDAO dao1 = new BallDAO($"ball_{ball.GetHashCode()}.json");
+				BallDAO dao2 = new BallDAO($"ball_{_balls.IndexOf(otherBall)}.json");
 				lock (_collideBalls)
 				{
-					BallDAO dao = new BallDAO("file.json");
-					dao.write(ball);
 					ball.MotionDirection = new Point((int)ballXVelocity, (int)ballYVelocity);
 					otherBall.MotionDirection = new Point((int)otherBallXVelocity, (int)otherBallYVelocity);
+					dao2.write(otherBall);
+					dao1.write(ball);
 				}
 			}
 		}
