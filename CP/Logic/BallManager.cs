@@ -159,6 +159,8 @@ namespace Logic
 											(2 * ball.Mass * ball.MotionDirection.Y) / (ball.Mass + otherBall.Mass));
 				lock (_collideBalls)
 				{
+					BallDAO dao = new BallDAO("file.json");
+					dao.write(ball);
 					ball.MotionDirection = new Point((int)ballXVelocity, (int)ballYVelocity);
 					otherBall.MotionDirection = new Point((int)otherBallXVelocity, (int)otherBallYVelocity);
 				}
