@@ -19,6 +19,7 @@ namespace Logic
 		private readonly List<IObserver> _observers = new List<IObserver>();
 		private object _collideBalls = new object();
 		private object _serialize = new object();
+		private BallDAO dao;
 
 		public BallManager(int width, int height, int radius)
 		{
@@ -38,6 +39,7 @@ namespace Logic
 
         public override void CreateBalls(int amount)
         {
+			dao = new BallDAO();
 			Random random = new Random();
 
 			for (int i = 0; i < amount; i++)
@@ -132,10 +134,10 @@ namespace Logic
 			}
 
 			if (write) {
-				BallDAO dao = new BallDAO($"ball_{_balls.IndexOf(ball)}.json");
+			
 				lock (_serialize)
 				{
-					dao.write(ball);
+					dao.write(ball, _balls.IndexOf(ball));
 				}
             }
 		}
@@ -171,8 +173,6 @@ namespace Logic
 				double otherBallYVelocity = (otherBall.MotionDirection.Y * (otherBall.Mass - ball.Mass) / (ball.Mass + otherBall.Mass) +
 											(2 * ball.Mass * ball.MotionDirection.Y) / (ball.Mass + otherBall.Mass));
 
-				BallDAO dao1 = new BallDAO($"ball_{_balls.IndexOf(ball)}.json");
-				BallDAO dao2 = new BallDAO($"ball_{_balls.IndexOf(otherBall)}.json");
 
 				lock (_collideBalls)
 				{
@@ -181,8 +181,8 @@ namespace Logic
 				}
 				lock(_serialize)
                 {	
-					dao1.write(ball);
-					dao2.write(otherBall);
+					dao.write(ball, _balls.IndexOf(ball));
+					dao.write(otherBall, _balls.IndexOf(otherBall));
                 }
 			}
 		}
