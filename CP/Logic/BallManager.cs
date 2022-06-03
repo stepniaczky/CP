@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Timers;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
@@ -20,6 +21,7 @@ namespace Logic
 		private object _collideBalls = new object();
 		private object _serialize = new object();
 		private BallDAO dao;
+		private System.Timers.Timer timer;
 
 		public BallManager(int width, int height, int radius)
 		{
@@ -112,7 +114,20 @@ namespace Logic
 			{
 				thread.Start();
 			}
+			
+			timer = new System.Timers.Timer();
+			timer.Interval = 1000;
+			timer.Elapsed += OnTimerElapsed;
+			timer.Start();
 		}
+
+		private void OnTimerElapsed(object source, ElapsedEventArgs e)
+        {
+			foreach (DataApi ball in _balls)
+            {
+				dao.write(ball,_balls.IndexOf(ball));
+            }
+        }
         
 
 		public override void CheckEdgeCollisions(DataApi ball)
@@ -132,14 +147,6 @@ namespace Logic
 				write = true;
 
 			}
-
-			if (write) {
-			
-				lock (_serialize)
-				{
-					dao.write(ball, _balls.IndexOf(ball));
-				}
-            }
 		}
 
 		public override void CheckBallCollisions(DataApi ball)
@@ -179,16 +186,12 @@ namespace Logic
 					ball.MotionDirection = new Point((int)ballXVelocity, (int)ballYVelocity);
 					otherBall.MotionDirection = new Point((int)otherBallXVelocity, (int)otherBallYVelocity);
 				}
-				lock(_serialize)
-                {	
-					dao.write(ball, _balls.IndexOf(ball));
-					dao.write(otherBall, _balls.IndexOf(otherBall));
-                }
 			}
 		}
 
 		public override void ClearBalls()
         {
+			timer.Dispose();
 			_threads.Clear();
 			_balls.Clear();
 			_logicBalls.Clear();
